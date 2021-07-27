@@ -113,7 +113,7 @@ class FormScreen extends React.Component {
                     <View style={styles.formTitleView} >
                         <Text style={styles.formTitleText}>{this.state.form.formMetaData.FormTitle}</Text>
                     </View>
-                    <Text>{JSON.stringify(this.state.formContents, null, 4)}</Text>
+                    {/*<Text>{JSON.stringify(this.state.formContents, null, 4)}</Text>*/}
 
 
                     {
