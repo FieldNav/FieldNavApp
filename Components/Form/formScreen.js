@@ -113,6 +113,7 @@ class FormScreen extends React.Component {
                     <View style={styles.formTitleView} >
                         <Text style={styles.formTitleText}>{this.state.form.formMetaData.FormTitle}</Text>
                     </View>
+                    <Text>{JSON.stringify(this.state.formContents, null, 4)}</Text>
 
 
                     {
@@ -123,26 +124,18 @@ class FormScreen extends React.Component {
                                 case "lgText":
                                     return (
                                         <View style={styles.formItemView} key={itemId}>
-                                            <Text style={styles.formLabelText}>{label}</Text>
+                                            <Text style={styles.formLabelText}>{label}{" "}{required === "true" ? "(required)" : ""}</Text>
                                             <Stack space={4} w="90%">
                                                 <TextArea 
                                                     h={20} 
                                                     placeholder="Enter Text Here" 
-                                                    onChangeText={ (text) => this.setState({ [label] : text })}
-                                                    value={ this.state[label] }
-                                                />
-                                                {/*
-                                                onChangeText={ (text) => {
-                                                        const oldForm = copy(this.state.formContents)
-                                                        this.setState(prevState => ({
-                                                            ...prevState.formContents,
-                                                            [label]: text
-                                                        }))
+                                                    onChangeText={ (text) => {
+                                                        let updated = clone(this.state.formContents)
+                                                        updated[label] = text
+                                                        this.setState({ formContents: updated })
                                                     }}
                                                     value={this.state.formContents[label]}
-
-                                                */}
-
+                                                />
                                             </Stack>
                                         </View>
                                     )
@@ -150,13 +143,16 @@ class FormScreen extends React.Component {
                                 case "text":
                                     return (
                                         <View style={styles.formItemView} key={itemId}>
-                                            <Text style={styles.formLabelText}>{label}</Text>
+                                            <Text style={styles.formLabelText}>{label}{" "}{required === "true" ? "(required)" : ""}</Text>
                                             <Stack space={4} w="90%">
-                                                <Input 
+                                                <Input
                                                     placeholder="Enter Text Here" 
-                                                    onChangeText={ (text) => this.setState({ [label] : text })}
-                                                    value={ this.state[label] }
-
+                                                    onChangeText={ (text) => {
+                                                        let updated = clone(this.state.formContents)
+                                                        updated[label] = text
+                                                        this.setState({ formContents: updated })
+                                                    }}
+                                                    value={this.state.formContents[label]}
                                                 />
                                             </Stack>
                                         </View>
@@ -165,14 +161,17 @@ class FormScreen extends React.Component {
                                 case "number":
                                     return (
                                         <View style={styles.formItemView} key={itemId}>
-                                            <Text style={styles.formLabelText}>{label}</Text>
+                                            <Text style={styles.formLabelText}>{label}{" "}{required === "true" ? "(required)" : ""}</Text>
                                             <Stack space={4} w="90%">
                                                 <Input 
                                                     placeholder="Enter value Here"
                                                     keyboardType="numeric"
-                                                    onChangeText={ (text) => this.setState({ [label] : text })}
-                                                    value={ this.state[label] }
-
+                                                    onChangeText={ (text) => {
+                                                        let updated = clone(this.state.formContents)
+                                                        updated[label] = text
+                                                        this.setState({ formContents: updated })
+                                                    }}
+                                                    value={this.state.formContents[label]}
                                                 />
                                             </Stack>
                                         </View>
@@ -181,17 +180,25 @@ class FormScreen extends React.Component {
                                 case "radioBtnGroup":
                                     return (
                                         <View style={styles.formItemView} key={itemId}>
-                                            <Text style={styles.formLabelText}>{label}</Text>
+                                            <Text style={styles.formLabelText}>{label}{" "}{required === "true" ? "(required)" : ""}</Text>
                                             <Stack space={4} w="90%">
                                                 <Radio.Group 
                                                     accessibilityLabel="Please pick a radio button" 
-                                                    onChange={value => this.setState({ [label] : value})}
-                                                    value={this.state[label]}
+                                                    onChange={ (value) => {
+                                                        let updated = clone(this.state.formContents)
+                                                        updated[label] = value
+                                                        this.setState({ formContents: updated })
+                                                    }}
+                                                    value={this.state.formContents[label]}
                                                 >
                                                 {
                                                     (item.items.length > 0 || item.items !== undefined) ? item.items.map( ele => {
                                                         return (
-                                                            <Radio my={1} value={ele}> {ele} </Radio>
+                                                            <Radio 
+                                                                my={1} 
+                                                                value={ele}
+                                                                accessibilityLabel="This is a dummy checkbox"
+                                                                > {ele} </Radio>
                                                         )
                                                     }) : <Text>Error loading items.</Text>
                                                 }
@@ -203,12 +210,16 @@ class FormScreen extends React.Component {
                                 case "checkboxGroup":
                                     return (
                                         <View style={styles.formItemView} key={itemId}>
-                                        <Text style={styles.formLabelText}>{label}</Text>
+                                        <Text style={styles.formLabelText}>{label}{" "}{required === "true" ? "(required)" : ""}</Text>
                                         <Stack space={4} w="90%">
                                             <Checkbox.Group 
                                                 accessibilityLabel="Please pick a checkbox"
-                                                onChange={value => this.setState({ [label] : value})}
-                                                value={this.state[label]}
+                                                onChange={ (values) => {
+                                                    let updated = clone(this.state.formContents)
+                                                    updated[label] = values
+                                                    this.setState({ formContents: updated}) }
+                                                }
+                                                value={this.state.formContents[label]}
                                             >
                                                 {
                                                     (item.items.length > 0 || item.items !== undefined) ? item.items.map( ele => {
@@ -225,12 +236,16 @@ class FormScreen extends React.Component {
                                 case "date":
                                     return (
                                         <View style={styles.formItemView} key={itemId}>
-                                            <Text style={styles.formLabelText}>{label}</Text>
+                                            <Text style={styles.formLabelText}>{label}{" "}{required === "true" ? "(required)" : ""}</Text>
                                             <Stack space={4} w="90%">
                                                 <DatePicker
                                                     locale='en'
-                                                    onDateChange={ (date) =>  this.setState({ [label] : date }) }
-                                                    date={ this.state[label] === undefined ? new Date() : this.state[label] }
+                                                    onDateChange={ (date) =>  {
+                                                        let updated = clone(this.state.formContents)
+                                                        updated[label] = date
+                                                        this.setState({ formContents: updated }) }
+                                                    }
+                                                    date={ this.state.formContents[label] === undefined ? new Date() : this.state.formContents[label]  }
                                                 />
                                             </Stack>
                                         </View>
@@ -239,12 +254,14 @@ class FormScreen extends React.Component {
                                 case "photo":
                                     return (
                                         <View style={styles.formItemView} key={itemId}>
-                                            <Text style={styles.formLabelText}>{label}</Text>
+                                            <Text style={styles.formLabelText}>{label}{" "}{required === "true" ? "(required)" : ""}</Text>
                                             <Stack space={4} w="90%">
                                                 <Button title="Select Image" 
                                                     onPress={() => {
                                                         ImagePicker.openPicker({includeBase64: true, multiple: true}).then(image => {
-                                                            this.setState({ [label] : image}); 
+                                                            let updated = clone(this.state.formContents)
+                                                            updated[label] = image
+                                                            this.setState({ formContents: updated }) 
                                                     })}}/>
                                             {
                                                 this.state[label] !== undefined ? this.state[label].map( photo => {
@@ -279,6 +296,7 @@ class FormScreen extends React.Component {
                     }
 
                 </ScrollView>
+                <Text>{console.log(this.state.formContents["Tools used"])}</Text>
                 </View>
             )
 

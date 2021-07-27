@@ -28,6 +28,12 @@ export default styles = StyleSheet.create({
     formLabelText:{
         fontSize: 20
     },
+    formInput: {
+        borderWidth: 1,
+        borderRadius: 5,
+        borderColor: 'blue'
+
+    }
 
 })
 
