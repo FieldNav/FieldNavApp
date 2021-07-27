@@ -55,18 +55,27 @@ class FormScreen extends React.Component {
           });
     }
 
+    unsubscribe = null;
     componentDidMount(){
         //let connectionAvailable = this.getNetworkInfo(); // needs to be async but isnt for some reason
         let connectionAvailable = true
-        if (connectionAvailable === true){
-            this.getForm()
 
-            
-        } else { // no network connection so get form from storage
-            console.log("disconnected");
-            this.getData();
-            this.setState({isLoading: false});
-        }
+        unsubscribe = NetInfo.addEventListener(state => {
+            let connected = state.type
+            if (connected) {
+                console.log("online");
+                this.getForm(); 
+            } else {
+                console.log("offline");
+                this.getData();
+                this.setState({isLoading: false});
+            }   
+        });
+    }
+
+    componentWillUnmount() {
+        // Unsubscribe
+        if (unsubscribe != null) unsubscribe()
     }
 
 
@@ -197,7 +206,8 @@ class FormScreen extends React.Component {
                                                             <Radio 
                                                                 my={1} 
                                                                 value={ele}
-                                                                accessibilityLabel="This is a dummy checkbox"
+                                                                accessibilityLabel="This is a dummy radio"
+                                                                key={Math.random()}
                                                                 > {ele} </Radio>
                                                         )
                                                     }) : <Text>Error loading items.</Text>
@@ -224,7 +234,12 @@ class FormScreen extends React.Component {
                                                 {
                                                     (item.items.length > 0 || item.items !== undefined) ? item.items.map( ele => {
                                                         return (
-                                                            <Checkbox my={1} value={ele}> {ele} </Checkbox>
+                                                            <Checkbox 
+                                                                accessibilityLabel="This is a dummy radio"
+                                                                my={1} 
+                                                                value={ele}
+                                                                key={Math.random()}
+                                                                > {ele} </Checkbox>
                                                         )
                                                     }) : <Text>Error loading items.</Text>
                                                 }
@@ -264,7 +279,7 @@ class FormScreen extends React.Component {
                                                             this.setState({ formContents: updated }) 
                                                     })}}/>
                                             {
-                                                this.state[label] !== undefined ? this.state[label].map( photo => {
+                                                this.state.formContents[label] !== undefined ? this.state.formContents[label].map( photo => {
                                                     const base64Image = 'data:image/png;base64,'+photo.data
                                                     return (
                                                         <Image 
@@ -296,7 +311,6 @@ class FormScreen extends React.Component {
                     }
 
                 </ScrollView>
-                <Text>{console.log(this.state.formContents["Tools used"])}</Text>
                 </View>
             )
 
