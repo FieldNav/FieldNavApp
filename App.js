@@ -6,8 +6,9 @@ import { createStackNavigator } from '@react-navigation/stack';
 // Screens
 import SelectionScreen from './Components/SelectionScreen/selectionScreen';
 import FormScreen from './Components/Form/formScreen';
+import SubmittionScreen from './Components/SubmittionScreen/submittionScreen';
 
-import { NativeBaseProvider } from 'native-base';
+import { NativeBaseProvider, extendTheme } from 'native-base';
 
 import {LogBox} from 'react-native'
 LogBox.ignoreAllLogs();
@@ -51,23 +52,51 @@ function goToSelectionScreen({ route, navigation }) {
 
 function goToFormScreen({ route, navigation }) {
   const { ID } = route.params;
+  const [response, setResponse] = React.useState({});
   return (
     <View>
+      <Button title="Submit Form" onPress={() => navigation.navigate('Submittion Screen', {response: response})} />
       {/* this screen will contain the contents of the selected form <FormScreen ID={ID} /> */}
-      <FormScreen ID={ID} />
+      <FormScreen ID={ID} setResponse={setResponse}/>
       <Button title="Go back" onPress={() => navigation.goBack()} />
+      
     </View>
   );
+}
+
+
+function goToSubmissionScreen({ route, navigation }) {
+  const { response } = route.params
+  return (
+    <View>
+      <SubmittionScreen data={response}/>
+    </View>
+  )
 }
 
 
 const Stack = createStackNavigator();
 
 export default function App() {
-  const [formID, setFormID] = React.useState(0);
+
+  const theme = extendTheme({
+    components: {
+      Input: {
+        baseStyle: {
+          borderColor: 'primary.400',
+        }
+      },
+      /*Checkbox: {
+        baseStyle: {
+          borderColor: 'primary.400',
+          borderRadius: 'lg'
+        }
+      }*/
+    },
+  });
 
   return (
-    <NativeBaseProvider>
+    <NativeBaseProvider theme={theme}>
       <NavigationContainer>
         <Stack.Navigator initialRouteName="Home">
           <Stack.Screen 
@@ -84,38 +113,12 @@ export default function App() {
             name="Form Screen"
             component={goToFormScreen}
           />
+          <Stack.Screen
+            name="Submittion Screen"
+            component={goToSubmissionScreen}
+          />
         </Stack.Navigator>
       </NavigationContainer>
     </NativeBaseProvider>
   )
 }
-
-
-/*
-const Stack = createStackNavigator();
-
-export default function App2() {
-  const [formID, setFormID] = React.useState(0);
-
-  return (
-    <NavigationContainer>
-      <Stack.Navigator initialRouteName="Home">
-        <Stack.Screen 
-          name="Home" 
-          component={HomeScreen}
-          options={{ title: "FieldNav Form App" }}
-        />
-        <Stack.Screen
-          name="Form Selection Screen"
-          component={goToSelectionScreen}
-
-        />
-        <Stack.Screen
-          name="Form Screen"
-          component={goToFormScreen}
-        />
-      </Stack.Navigator>
-    </NavigationContainer>
-  )
-}
-*/

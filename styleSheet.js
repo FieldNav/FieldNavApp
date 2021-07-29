@@ -12,8 +12,8 @@ export default styles = StyleSheet.create({
     },
     formMain: {
         margin: 10,
-        padding: 15,
-        paddingBottom: 50
+        padding: 10,
+        paddingBottom: 80
     },
     formTitleView:{
         alignItems: "center",
@@ -32,7 +32,6 @@ export default styles = StyleSheet.create({
         borderWidth: 1,
         borderRadius: 5,
         borderColor: 'blue'
-
     }
 
 })

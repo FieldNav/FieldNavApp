@@ -27,12 +27,18 @@
 
 
 # Links / Resources
+- https://dev.to/andyrewlee/cheat-sheet-for-updating-objects-and-arrays-in-react-state-48np
 - https://reactnavigation.org/
 - https://react-native-async-storage.github.io/async-storage/docs/install/
 - https://nativebase.io/
 - https://github.com/react-native-netinfo/react-native-netinfo
+- https://programmingwithmosh.com/react-native/network-connection-in-your-react-native-app/
 - https://www.npmjs.com/package/firebase
 - https://www.npmjs.com/package/just-clone
 - https://github.com/henninghall/react-native-date-picker
 - https://github.com/shijingsh/react-native-customized-image-picker
 
+
+
+# IOS Simulator notes
+- `I/O > keyboard > connect hardware keyboard` to toggle macos or ios keyboard

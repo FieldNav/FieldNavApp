@@ -33,12 +33,6 @@ class FormScreen extends React.Component {
         }
     }
 
-    getNetworkInfo = () => {
-        NetInfo.fetch().then( state => {
-            return state.isConnected;
-        })
-    }
-
     getForm = () => {
         const firestoreRef = firebase.firestore().collection('Forms'); // get collection from DB
         const queryRef = firestoreRef.where('formMetaData.FormId', '==', this.props.ID); // get selected form
@@ -57,20 +51,20 @@ class FormScreen extends React.Component {
 
     unsubscribe = null;
     componentDidMount(){
-        //let connectionAvailable = this.getNetworkInfo(); // needs to be async but isnt for some reason
-        let connectionAvailable = true
-
         unsubscribe = NetInfo.addEventListener(state => {
             let connected = state.type
-            if (connected) {
+            if (!connected) {
                 console.log("online");
                 this.getForm(); 
             } else {
                 console.log("offline");
                 this.getData();
-                this.setState({isLoading: false});
             }   
         });
+    }
+
+    componentDidUpdate() {
+        this.props.setResponse(this.state.formContents)
     }
 
     componentWillUnmount() {
@@ -82,6 +76,7 @@ class FormScreen extends React.Component {
     getData = async () => {
         try {
             const value = await AsyncStorage.getItem('@Selected_Form');
+            console.log(value)
             if (value !== null) {
                 let val = JSON.parse(value); // turn string into obj
                 const savedForm = clone(val);  // deep clone object
@@ -91,8 +86,11 @@ class FormScreen extends React.Component {
                         formMetaData: savedForm,
                     }
                 }))
+                this.setState({isLoading: false});
+
             }
         } catch (e) {
+            console.log("bye")
             console.log(`getData error ==> ${e}`);
         }
     }
@@ -280,12 +278,13 @@ class FormScreen extends React.Component {
                                                     })}}/>
                                             {
                                                 this.state.formContents[label] !== undefined ? this.state.formContents[label].map( photo => {
-                                                    const base64Image = 'data:image/png;base64,'+photo.data
+                                                    const base64Image = 'data:image/png;base64,'+photo.data // make the base64 data compatable with the Image component
                                                     return (
                                                         <Image 
                                                             source={{
                                                                 uri: base64Image
                                                             }}
+                                                            key={photo.path}
                                                             style={{height: 100, width: 100}}
                                                         />      
                                                     )

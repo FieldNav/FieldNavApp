@@ -65,6 +65,7 @@ class SelectionScreen extends React.Component {
     updateScreen(ID){
         this.setState({ formID: ID })
         this.props.setID(ID); 
+        this.storeSelectedForm(ID)
     }
 
 
