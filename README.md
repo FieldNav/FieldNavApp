@@ -20,7 +20,7 @@ The Form Viewer app allows an inspector to render and complete forms built by th
 	- This command links all the native code from the libraries we are using to the React Native app
 6. Once completed, use the command `npx run ios` to start the app
 	> ### Important
-	> - If you are on a macOS machine with an M1 chip, this command will not  work due to the MapBox library.
+	> - If you are on a macOS machine with an M1 chip, this command will not work due to the MapBox library ( see [here](https://github.com/react-native-mapbox-gl/maps/issues/1139) )
 	> - To run the app, you must use xcode in rosetta to run the app
 	> - Once you have modified xcode to use rosetta, then use xcode to cd into the app and run the app from there
 
