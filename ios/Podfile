@@ -1,6 +1,8 @@
 require_relative '../node_modules/react-native/scripts/react_native_pods'
 require_relative '../node_modules/@react-native-community/cli-platform-ios/native_modules'
 pod 'react-native-date-picker', :path => '../node_modules/react-native-date-picker'
+pod 'react-native-mapbox-gl', :path => '../node_modules/@react-native-mapbox-gl/maps'
+
 
 
 
@@ -8,6 +10,11 @@ platform :ios, '10.0'
 
 target 'formApp' do
   config = use_native_modules!
+  
+  pre_install do |installer|
+    $RNMBGL.pre_install(installer)
+  end
+
 
   use_react_native!(
     :path => config[:reactNativePath],
@@ -27,6 +34,7 @@ target 'formApp' do
   use_flipper!()
 
   post_install do |installer|
+    $RNMBGL.post_install(installer)
     react_native_post_install(installer)
   end
 end

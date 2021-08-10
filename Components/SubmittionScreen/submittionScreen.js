@@ -1,16 +1,17 @@
 import React from 'react';
 import { View, Text, Image } from 'react-native';
+// MISC
 import styles from '../../styleSheet';
+
+
+
 
 
 class SubmittionScreen extends React.Component{
     constructor(props){
-        super(props)
+        super(props);
         this.state = {}
     }
-
-
-
 
 
 
